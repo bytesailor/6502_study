@@ -329,6 +329,8 @@ SkipMoveDown
 	lda #%01000000	;Left?
 	bit SWCHA
 	bne SkipMoveLeft
+         lda captured	; captured? move the ball too
+        beq NoCaptureMove
 	ldx #$10	;a 1 in the left nibble means go left
 SkipMoveLeft
 	lda #%10000000	;Right?
