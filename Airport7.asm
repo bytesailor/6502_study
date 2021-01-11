@@ -179,6 +179,7 @@ InSprite
         lda Frame0,y	; load bitmap data
 	sta WSYNC	; wait for next scanline (as late as possible!)
         sta GRP0	; set sprite 0 pixels
+        ;sta GRP1	; set sprite 0 pixels
         pla		; pull bitmap data from stack
         sta COLUP0	; set sprite 0 color
         DRAW_BALL	; draw the ball on this line?
@@ -335,8 +336,7 @@ SkipMoveDown
 	ldx #$10	;a 1 in the left nibble means go left
 SkipMoveLeft
 	lda #%10000000	;Right?
-	bit SWCHA
-        lda captured
+	bit SWCHA     
         
 	;//bne SkipMoveRight
 	ldx #$F0	;a -1 in the left nibble means go right...
@@ -346,6 +346,8 @@ SkipMoveRight
         beq NoCaptureMove
         stx HMBL	; set ball move register
 NoCaptureMove
+        lda #0
+        sta captured
         sta WSYNC
         sta HMOVE	; apply the move(s)
 
@@ -405,7 +407,7 @@ Frame0
         .byte #%00111000;--
         .byte #%11111111;--
         .byte #%11111110;--
-        .byte #%10000000;--
+        .byte #%11000000;--
         .byte #%00000000;--
 ;---End Graphics Data---
       
@@ -419,7 +421,7 @@ Frame1
         .byte #%00111000;--
         .byte #%11111111;--
         .byte #%11111110;--
-        .byte #%10000000;--
+        .byte #%11000000;--
         .byte #%00000000;--
 	
 ;; Color data for each line of sprite
