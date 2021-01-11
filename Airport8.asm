@@ -95,15 +95,9 @@ Start	CLEAN_START
         sta yballvel
         lda #$57
         sta xballvel
-        
-        ; set up initial positions
-      ;lda #150
-       ; sta YPos0
-       ; lda #100
-       ; sta YPos1
-       ; lda #38
-       ; sta XPos0
-       ; sta XPos1
+          lda #1
+        sta VDELP0	
+    
         
 
 ; Next frame loop
@@ -170,7 +164,7 @@ ScanLoop3
 	sta WSYNC
         DRAW_BALL	; draw the ball on this line?
         inx 
-        cpx #30
+        cpx #31
         bne ScanLoop3
 
 ; Bottom half of screen with sprite
@@ -269,7 +263,7 @@ ScanLoop5
         sta PF2
         lda #0
         sta GRP0
-         lda #0
+        lda #0
         sta GRP1
         inx
         cpx #193
@@ -296,8 +290,7 @@ ScanLoop5
 ; Now we bounce the ball depending on where it is
 PlayerCollision
 ; Is the button pressed? if so, just capture the ball
-	lda INPT4		;read button input
-        
+	lda INPT4		;read button input        
 	bmi ButtonNotPressed	;skip if button not pressed        
         inc captured		; set capture flag
         lda #SpriteHeight
