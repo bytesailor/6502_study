@@ -45,12 +45,7 @@ avol0		byte	; shadow register for AVOL0
 XPos		byte
 YPos		byte
 
-;P0	byte	; Y counter for player 0
-;P1	byte	; Y counter for player 1
-;YPos0	byte	; Y position of player 0 sprite
-;XPos0	byte	; X position of player 0 sprite
-;YPos1	byte	; Y position of player 1 sprite
-;XPos1	byte	; X position of player 1 sprite
+
 
 ; Color constants
 BGCOLOR		equ $80
@@ -160,7 +155,7 @@ ScanLoop2
 ; Fetch 2nd and 3rd parts of bitmap
 	lda #TopBorder1-20,x
         sta PF1
-        lda #TopBorder2-20,x
+       ; lda #TopBorder2-20,x
         sta PF2
         inx
         cpx #28
@@ -175,7 +170,7 @@ ScanLoop3
 	sta WSYNC
         DRAW_BALL	; draw the ball on this line?
         inx 
-        cpx #32
+        cpx #30
         bne ScanLoop3
 
 ; Bottom half of screen with sprite
@@ -237,12 +232,12 @@ LVScan
         lda #0		; not in sprite, load 0
 InSprite
 	tay		; local coord -> Y
-        lda Frame0,y	; lookup color
+        lda ground_sprite,y	; lookup color
         sta WSYNC	; sync w/ scanline
         sta GRP1	; store bitmap
         lda ColorFrame0,y ; lookup color
         sta COLUP0	; store color               
-      
+        
         txa		; X -> A
        ;sec		; set carry for subtract
         sbc YPos
@@ -424,6 +419,7 @@ SkipMoveRight
         beq NoCaptureMove
         stx HMBL	; set ball move register
 NoCaptureMove
+       ;Solução para o problema de travar a carga no aviao
        ;lda #0
        ;sta captured
         sta WSYNC
@@ -502,15 +498,18 @@ Frame1
         .byte #%11000000;--
         .byte #%00000000;--
 
-ground_sprite   .byte %00011000
-                .byte %00111100
-                .byte %01111110
-                .byte %11111111
-                .byte %00111100
-                .byte %00111100
-                .byte %00100100
-                .byte %00100100
-                .byte %00000000
+ground_sprite  
+		.byte #0
+		.byte %0001111000
+                .byte %0011111111
+                .byte %0111111111
+                .byte %1111111111
+                .byte %0011110011
+                .byte %0011110011
+                .byte %0010010011
+                .byte %0010010011
+                
+                
 	
 ;; Color data for each line of sprite
 ;;{pal:"vcs"};;
