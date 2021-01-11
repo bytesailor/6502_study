@@ -236,13 +236,13 @@ ButtonNotPressed
         sta animofs	; use regular bitmap
 ; See if we bounce off of top half or bottom half  of player
 ; (yplyr + height/2 - yball)
-	;ldx #1
-	;lda yplyr
-        ;clc
-        ;adc #SpriteHeight
-        ;sec
-        ;sbc yball
-        ;bne StoreVel	; bottom half, bounce down
+	ldx #1
+	lda yplyr
+        clc
+        adc #SpriteHeight-2
+        sec
+        sbc yball
+        bne StoreVel	; bottom half, bounce down
 	;ldx #$ff	; top half, bounce up
         ;bne StoreVel
 PlayfieldCollision
@@ -302,7 +302,7 @@ ballCaptured
 	bit SWCHA 
 	bne SkipMoveUp
         ldx yplyr
-        cpx #129
+        cpx #162
         bcc SkipMoveUp
         dex
         stx yplyr
@@ -314,7 +314,7 @@ SkipMoveUp
 	bit SWCHA 
 	bne SkipMoveDown            
         ldx yplyr
-      ;cpx #185-SpriteHeight
+        cpx #255
         bcs SkipMoveDown
         inx
         stx yplyr
@@ -328,11 +328,16 @@ SkipMoveDown
 	ldx #0		; assume speed is 0 if no movement
 	lda #%01000000	;Left?
 	bit SWCHA
+        ;dec captured
 	bne SkipMoveLeft
+         lda captured	; captured? move the ball too
+        beq NoCaptureMove
 	ldx #$10	;a 1 in the left nibble means go left
 SkipMoveLeft
 	lda #%10000000	;Right?
 	bit SWCHA
+        lda captured
+        
 	;//bne SkipMoveRight
 	ldx #$F0	;a -1 in the left nibble means go right...
 SkipMoveRight
